@@ -16,7 +16,7 @@ function AddEditPage(props) {
   const isAddMode = !photoId;
 
   const editedPhoto = useSelector(state =>{
-    const foundPhoto = state.photos.find(x => x.id === +photoId);
+    const foundPhoto = state.photos.find(x => x.id === photoId);
     // console.log({ photos: state.photos, photoId, foundPhoto });
     return foundPhoto;
   });
