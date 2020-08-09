@@ -2,19 +2,19 @@ import {createSlice} from '@reduxjs/toolkit';
 
 const initialPagtination={
     _current:1,
-    _limit:10,
+    _limit:12,
 };
 
 const pagination = createSlice({
     name: 'counter',
     initialState: initialPagtination,
     reducers: {
-      getDataPage:(state,action)=>{
-         
+      setCurrent:(state,action)=>{
+         state['_current']=action.payload;
       }
     }
 })
 
 const {reducer, actions} = pagination;
-export const {getDataPage} = actions;
+export const {setCurrent} = actions;
 export default reducer;

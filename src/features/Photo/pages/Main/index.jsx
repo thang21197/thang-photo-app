@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import axiosClient from 'api/axiosClient';
 import photosApi from 'api/api-photos';
 import PaginationPhotos from 'features/Photo/components/PaginationPhotos';
+import { setCurrent } from 'features/paginationSlice';
 // import axios from 'axios';
 // import queryString from 'query-string';
 
@@ -19,13 +20,24 @@ MainPage.propTypes = {};
 function MainPage(props) {
   const photos=useSelector(state=>state.photos);
   const pagination=useSelector(state=>state.pagination);
+  const {_current,_limit}=pagination;
   const dispatch=useDispatch();
   const history = useHistory();
   
+  const startPhoto=(_current-1)*_limit;
+  const endPhoto=_current*_limit;
+  const currentPhotos=photos.slice(startPhoto,endPhoto);
+
+
   const handlePhotoEditClick = (photo) => {
     // console.log('Edit: ', photo);
     const editPhotoUrl = `/photos/${photo.id}`;
     history.push(editPhotoUrl);
+  }
+
+  const handlePageChange  = (newPage) =>{
+    const action = setCurrent(newPage);
+    dispatch(action);
   }
 
   const handlePhotoRemoveClick = (photo) => {
@@ -56,9 +68,9 @@ function MainPage(props) {
         <div className="py-5">
             <Link to="/photos/add">Add new photo</Link>
         </div>
-        <PaginationPhotos/>
+        <PaginationPhotos totalPhotos={photos.length} limit={_limit} current={_current} pageChange={handlePageChange}/>
         <PhotoList
-          photoList={photos}
+          photoList={currentPhotos}
           onPhotoEditClick={handlePhotoEditClick}
           onPhotoRemoveClick={handlePhotoRemoveClick}
         />
